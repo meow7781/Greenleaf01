@@ -5,6 +5,7 @@ import { Ionicons, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 
 import * as Location from 'expo-location';
 
@@ -50,7 +51,9 @@ export default function HomeScreen() {
   }, []);
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top + 10, paddingBottom: insets.bottom }]}>
+    <View style={styles.container}>
+      <StatusBar style="light" />
+      <View style={{ height: insets.top, backgroundColor: '#000' }} />
       <LinearGradient colors={['#F0F4EF', '#FFFFFF']} style={StyleSheet.absoluteFill} />
       
       <View style={{ flex: 1 }}>

@@ -1,19 +1,60 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, TextInput, Image, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Text, TouchableOpacity, TextInput, Image, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, Alert } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import auth from '@react-native-firebase/auth';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 export default function LoginScreen() {
   const router = useRouter();
   const [phone, setPhone] = useState('');
+  const [otp, setOtp] = useState('');
   const [step, setStep] = useState<'phone' | 'otp'>('phone');
+  const [confirm, setConfirm] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = () => {
-    if (step === 'phone') {
-      setStep('otp');
-    } else {
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId: '36286520721-XXXXXXXX.apps.googleusercontent.com', // Replace with your Web Client ID from Firebase
+    });
+  }, []);
+
+  const handleLogin = async () => {
+    if (loading) return;
+    setLoading(true);
+
+    try {
+      if (step === 'phone') {
+        const fullPhone = `+91${phone}`;
+        const confirmation = await auth().signInWithPhoneNumber(fullPhone);
+        setConfirm(confirmation);
+        setStep('otp');
+      } else {
+        await confirm.confirm(otp);
+        router.replace('/(tabs)');
+      }
+    } catch (error: any) {
+      console.log(error);
+      Alert.alert('Authentication Error', error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      setLoading(true);
+      await GoogleSignin.hasPlayServices();
+      const { idToken } = await GoogleSignin.signIn();
+      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+      await auth().signInWithCredential(googleCredential);
       router.replace('/(tabs)');
+    } catch (error: any) {
+      console.log(error);
+      Alert.alert('Google Login Error', error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -61,15 +102,17 @@ export default function LoginScreen() {
                   placeholder="0 0 0 0 0 0"
                   keyboardType="number-pad"
                   maxLength={6}
+                  value={otp}
+                  onChangeText={setOtp}
                   autoFocus
                 />
               </View>
             )}
           </View>
 
-          <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
+          <TouchableOpacity style={styles.loginBtn} onPress={handleLogin} disabled={loading}>
             <LinearGradient colors={['#00C881', '#009D65']} style={styles.btnGradient}>
-              <Text style={styles.btnText}>{step === 'phone' ? 'Send OTP' : 'Verify'}</Text>
+              <Text style={styles.btnText}>{loading ? 'Please wait...' : (step === 'phone' ? 'Send OTP' : 'Verify')}</Text>
             </LinearGradient>
           </TouchableOpacity>
 
@@ -82,7 +125,7 @@ export default function LoginScreen() {
               </View>
 
               <View style={styles.socialBtns}>
-                <TouchableOpacity style={[styles.socialBtn, styles.googleFullBtn]} onPress={() => router.replace('/(tabs)')}>
+                <TouchableOpacity style={[styles.socialBtn, styles.googleFullBtn]} onPress={handleGoogleLogin} disabled={loading}>
                   <Ionicons name="logo-google" size={20} color="#EA4335" />
                   <Text style={styles.socialBtnText}>Continue with Google</Text>
                 </TouchableOpacity>

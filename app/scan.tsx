@@ -5,12 +5,15 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
+import * as Haptics from 'expo-haptics';
+
 const { width, height } = Dimensions.get('window');
 
 export default function ScanScreen() {
   const router = useRouter();
   const [isScanning, setIsScanning] = useState(false);
   const [mlStatus, setMlStatus] = useState<'idle' | 'loading' | 'success'>('idle');
+  const [showResult, setShowResult] = useState(false);
   const scanLineAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -34,21 +37,20 @@ export default function ScanScreen() {
     }
   }, [isScanning]);
 
-  const handleGalleryPick = () => {
+  const handleScan = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
     setIsScanning(true);
     setMlStatus('loading');
     
-    // Simulate ML Processing (TensorFlow/PyTorch)
+    // Simulate ML Processing
     setTimeout(() => {
       setMlStatus('success');
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       setTimeout(() => {
         setIsScanning(false);
-        router.push({
-          pathname: '/details',
-          params: { name: 'Money Plant (Scanned)', disease: 'Healthy' }
-        });
-      }, 1500);
-    }, 3000);
+        setShowResult(true);
+      }, 1000);
+    }, 2500);
   };
 
   const translateY = scanLineAnim.interpolate({
@@ -94,24 +96,62 @@ export default function ScanScreen() {
           
           {mlStatus === 'loading' && (
             <BlurView intensity={80} tint="dark" style={styles.loadingBox}>
-              <Text style={styles.loadingText}>Running PyTorch Inference...</Text>
+              <Text style={styles.loadingText}>Running AI Inference...</Text>
               <View style={styles.progressBar}>
-                <Animated.View style={[styles.progressFill, { width: '60%' }]} />
+                <Animated.View style={[styles.progressFill, { width: '85%' }]} />
               </View>
+            </BlurView>
+          )}
+
+          {showResult && (
+            <BlurView intensity={95} tint="light" style={styles.resultModal}>
+              <View style={styles.modalHeader}>
+                <Text style={styles.modalPlantName}>Money Plant</Text>
+                <TouchableOpacity onPress={() => setShowResult(false)}>
+                  <Ionicons name="close-circle" size={32} color="#00C881" />
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.statsGrid}>
+                <View style={styles.statItem}>
+                  <Text style={styles.statEmoji}>💨</Text>
+                  <Text style={styles.statLabel}>Oxygen</Text>
+                  <Text style={styles.statVal}>2.4L / Day</Text>
+                </View>
+                <View style={styles.statItem}>
+                  <Text style={styles.statEmoji}>🍲</Text>
+                  <Text style={styles.statLabel}>Fav Food</Text>
+                  <Text style={styles.statVal}>NPK 10-10</Text>
+                </View>
+                <View style={styles.statItem}>
+                  <Text style={styles.statEmoji}>🧬</Text>
+                  <Text style={styles.statLabel}>Life Span</Text>
+                  <Text style={styles.statVal}>15 Years</Text>
+                </View>
+              </View>
+
+              <View style={styles.fixBox}>
+                <Text style={styles.fixTitle}>💡 How to increase life span?</Text>
+                <Text style={styles.fixText}>Current health is slightly low. Fix by: Pruning yellow leaves, adding organic mulch, and ensuring indirect sunlight.</Text>
+              </View>
+
+              <TouchableOpacity style={styles.detailsFullBtn} onPress={() => router.push('/details')}>
+                <Text style={styles.detailsFullBtnText}>View Full Botanical Report</Text>
+              </TouchableOpacity>
             </BlurView>
           )}
         </View>
 
         <View style={styles.bottomBar}>
           <BlurView intensity={80} tint="light" style={styles.controlBlur}>
-            <TouchableOpacity style={styles.controlItem} onPress={handleGalleryPick}>
+            <TouchableOpacity style={styles.controlItem} onPress={handleScan}>
               <Ionicons name="images-outline" size={26} color="#000" />
               <Text style={styles.controlLabel}>Gallery</Text>
             </TouchableOpacity>
             
             <TouchableOpacity 
               style={[styles.mainScanBtn, isScanning && { backgroundColor: '#FF3B30' }]}
-              onPress={() => setIsScanning(!isScanning)}
+              onPress={handleScan}
             >
               <Ionicons name={isScanning ? "stop" : "scan"} size={30} color={isScanning ? "#FFF" : "#000"} />
             </TouchableOpacity>
@@ -267,5 +307,85 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 10,
     elevation: 8,
+  },
+  resultModal: {
+    position: 'absolute',
+    width: width - 40,
+    padding: 25,
+    borderRadius: 35,
+    overflow: 'hidden',
+    backgroundColor: 'rgba(255,255,255,0.85)',
+    borderWidth: 1,
+    borderColor: 'rgba(0,200,129,0.2)',
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  modalPlantName: {
+    fontSize: 26,
+    fontWeight: '900',
+    color: '#000',
+  },
+  statsGrid: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 25,
+  },
+  statItem: {
+    alignItems: 'center',
+    backgroundColor: '#FFF',
+    padding: 12,
+    borderRadius: 20,
+    width: '30%',
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    elevation: 2,
+  },
+  statEmoji: {
+    fontSize: 24,
+    marginBottom: 5,
+  },
+  statLabel: {
+    fontSize: 10,
+    color: '#666',
+    fontWeight: 'bold',
+  },
+  statVal: {
+    fontSize: 12,
+    fontWeight: '900',
+    color: '#00C881',
+    marginTop: 2,
+  },
+  fixBox: {
+    backgroundColor: 'rgba(0,200,129,0.1)',
+    padding: 18,
+    borderRadius: 22,
+    marginBottom: 20,
+  },
+  fixTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#000',
+    marginBottom: 6,
+  },
+  fixText: {
+    fontSize: 12,
+    color: '#444',
+    lineHeight: 18,
+  },
+  detailsFullBtn: {
+    backgroundColor: '#00C881',
+    height: 55,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  detailsFullBtnText: {
+    color: '#FFF',
+    fontWeight: 'bold',
+    fontSize: 15,
   },
 });

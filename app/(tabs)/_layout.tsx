@@ -40,7 +40,7 @@ export default function TabLayout() {
             <View style={styles.tabItem}>
               <Ionicons 
                 name={focused ? "home" : "home-outline"} 
-                size={22} 
+                size={26} 
                 color={focused ? "#D8F36C" : "rgba(255,255,255,0.45)"} 
               />
               {focused && <View style={styles.dot} />}
@@ -56,7 +56,7 @@ export default function TabLayout() {
             <View style={styles.tabItem}>
               <Ionicons 
                 name={focused ? "cube" : "cube-outline"} 
-                size={22} 
+                size={26} 
                 color={focused ? "#D8F36C" : "rgba(255,255,255,0.45)"} 
               />
               {focused && <View style={styles.dot} />}
@@ -71,7 +71,7 @@ export default function TabLayout() {
           tabBarIcon: () => (
             <View style={styles.scanWrap}>
               <LinearGradient colors={['#D8F36C', '#A8E040']} style={styles.scanCircle}>
-                <Ionicons name="scan" size={26} color="#1A2A1A" />
+                <Ionicons name="scan" size={32} color="#1A2A1A" />
               </LinearGradient>
             </View>
           ),
@@ -92,7 +92,7 @@ export default function TabLayout() {
             <View style={styles.tabItem}>
               <Ionicons 
                 name={focused ? "person" : "person-outline"} 
-                size={22} 
+                size={26} 
                 color={focused ? "#D8F36C" : "rgba(255,255,255,0.45)"} 
               />
               {focused && <View style={styles.dot} />}
@@ -133,9 +133,9 @@ const styles = StyleSheet.create({
     marginTop: -25,
   },
   scanCircle: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
+    width: 64,
+    height: 64,
+    borderRadius: 32,
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#D8F36C',

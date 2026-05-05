@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, Text, ScrollView, Image, TouchableOpacity, SafeAreaView, TextInput, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, Image, TouchableOpacity, TextInput, Dimensions } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -24,12 +25,13 @@ const FAST_PLANTS = [
 
 export default function HomeScreen() {
   const [addedItems, setAddedItems] = React.useState<string[]>([]);
+  const insets = useSafeAreaInsets();
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
       <LinearGradient colors={['#F0F4EF', '#FFFFFF']} style={StyleSheet.absoluteFill} />
       
-      <SafeAreaView style={{ flex: 1 }}>
+      <View style={{ flex: 1 }}>
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 150 }}>
 
           
@@ -158,7 +160,7 @@ export default function HomeScreen() {
             </LinearGradient>
           </TouchableOpacity>
         )}
-      </SafeAreaView>
+      </View>
     </View>
   );
 }

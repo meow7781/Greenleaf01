@@ -66,7 +66,7 @@ export default function ScanScreen() {
             <Ionicons name="chevron-back" size={24} color="#000" />
           </TouchableOpacity>
           <View style={styles.mlBadge}>
-            <MaterialCommunityIcons name="tensorflow" size={16} color="#FF6F00" />
+            <MaterialCommunityIcons name="robot-outline" size={16} color="#FF6F00" />
             <Text style={styles.mlText}>TF-Lite Active</Text>
           </View>
           <TouchableOpacity style={styles.iconBtn}>

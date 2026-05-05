@@ -4,8 +4,10 @@ import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function ProfileScreen() {
+  const insets = useSafeAreaInsets();
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [userName, setUserName] = useState('Jacob Oran');
   const [isEditing, setIsEditing] = useState(false);
@@ -23,8 +25,8 @@ export default function ProfileScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: bgColor }]}>
-      <View style={{ height: 40, backgroundColor: '#1A2A1A' }} />
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 }}>
+      <View style={{ height: insets.top, backgroundColor: '#1A2A1A' }} />
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 150 }}>
         
         {/* Explore-style Header for Profile */}
         <View style={styles.headerExplore}>
@@ -115,6 +117,7 @@ const styles = StyleSheet.create({
   },
   headerExplore: {
     padding: 25,
+    paddingTop: 50,
     backgroundColor: '#1A2A1A',
     borderBottomLeftRadius: 40,
     borderBottomRightRadius: 40,

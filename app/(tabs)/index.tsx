@@ -158,6 +158,10 @@ export default function HomeScreen() {
                 </View>
                 <View style={styles.pInfo}>
                   <Text style={styles.pName} numberOfLines={1}>{plant.name}</Text>
+                  <View style={styles.codRow}>
+                    <Ionicons name="cash-outline" size={12} color="#00C881" />
+                    <Text style={styles.codText}>Cash on Delivery</Text>
+                  </View>
                   <Text style={styles.pPrice}>{plant.price}</Text>
                   <TouchableOpacity 
                     style={styles.addBtn}
@@ -434,6 +438,17 @@ const styles = StyleSheet.create({
   pName: {
     fontSize: 16,
     fontWeight: '700',
+  },
+  codRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginTop: 4,
+  },
+  codText: {
+    fontSize: 10,
+    color: '#00C881',
+    fontWeight: 'bold',
   },
   pTime: {
     fontSize: 12,

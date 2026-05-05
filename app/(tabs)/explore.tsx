@@ -70,6 +70,10 @@ export default function ExploreScreen() {
                 </View>
                 <View style={styles.pInfo}>
                   <Text style={styles.pName}>{plant.name}</Text>
+                  <View style={styles.codRow}>
+                    <Ionicons name="cash-outline" size={12} color="#00C881" />
+                    <Text style={styles.codText}>Cash on Delivery</Text>
+                  </View>
                   <View style={styles.pRow}>
                     <Text style={styles.pPrice}>{plant.price}</Text>
                     <TouchableOpacity 
@@ -195,6 +199,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#333',
     marginBottom: 5,
+  },
+  codRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginBottom: 5,
+  },
+  codText: {
+    fontSize: 10,
+    color: '#00C881',
+    fontWeight: 'bold',
   },
   pRow: {
     flexDirection: 'row',

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, TextInput, Image, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, Alert } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, TextInput, Image, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, Alert, StatusBar } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -37,7 +37,8 @@ export default function LoginScreen() {
 
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.container}>
-      <SafeAreaView style={{ flex: 1 }}>
+      <StatusBar barStyle="dark-content" backgroundColor="#FFF" />
+      <SafeAreaView style={{ flex: 1, paddingTop: Platform.OS === 'android' ? 40 : 0 }}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
           <Ionicons name="arrow-back" size={24} color="#000" />
         </TouchableOpacity>
@@ -209,14 +210,15 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   otpInput: {
-    fontSize: 32,
+    fontSize: 24,
     fontWeight: 'bold',
     color: '#000',
-    letterSpacing: 10,
     borderBottomWidth: 2,
     borderBottomColor: '#00C881',
-    paddingBottom: 10,
+    paddingBottom: 15,
     textAlign: 'center',
+    width: '100%',
+    letterSpacing: 2,
   },
   loginBtn: {
     height: 55,

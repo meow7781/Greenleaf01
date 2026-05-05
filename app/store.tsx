@@ -31,7 +31,7 @@ export default function StoreScreen() {
             <ScrollView horizontal showsHorizontalScrollIndicator={false} pagingEnabled snapToAlignment="center">
               {[1, 2, 3].map((_, i) => (
                 <View key={i} style={styles.carouselItem}>
-                  <BlurView intensity={30} tint="light" style={styles.plantGlass}>
+                  <View style={styles.plantGlass}>
                     <Image source={require('@/assets/images/office_plant.png')} style={styles.carouselImg} resizeMode="contain" />
                     <Text style={styles.carouselTitle}>Desk Plant</Text>
                     <View style={styles.carouselPriceRow}>
@@ -40,7 +40,7 @@ export default function StoreScreen() {
                         <Ionicons name="cart-outline" size={18} color="#FFF" />
                       </TouchableOpacity>
                     </View>
-                  </BlurView>
+                  </View>
                 </View>
               ))}
             </ScrollView>
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     padding: 30,
     overflow: 'hidden',
-    backgroundColor: 'rgba(255,255,255,0.1)',
+    backgroundColor: 'rgba(255,255,255,0.15)',
     borderWidth: 2,
     borderColor: 'rgba(180, 240, 76, 0.3)',
     alignItems: 'center',

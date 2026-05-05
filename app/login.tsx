@@ -18,13 +18,13 @@ export default function LoginScreen() {
   };
 
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.container}>
       <SafeAreaView style={{ flex: 1 }}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
           <Ionicons name="arrow-back" size={24} color="#000" />
         </TouchableOpacity>
 
-        <View style={styles.content}>
+        <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
           <View style={styles.brandHero}>
             <LinearGradient colors={['#D8F36C', '#B2F44C']} style={styles.logoCircle}>
               <Ionicons name="leaf" size={40} color="#1A2A1A" />
@@ -95,7 +95,7 @@ export default function LoginScreen() {
               <Text style={styles.resendText}>Resend Code</Text>
             </TouchableOpacity>
           )}
-        </View>
+        </ScrollView>
       </SafeAreaView>
     </KeyboardAvoidingView>
   );
@@ -111,9 +111,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   content: {
-    flex: 1,
+    flexGrow: 1,
     paddingHorizontal: 30,
     paddingTop: 20,
+    paddingBottom: 40,
   },
   brandHero: {
     alignItems: 'center',
@@ -232,8 +233,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   socialBtns: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    width: '100%',
+    alignItems: 'center',
   },
   socialBtn: {
     height: 60,
@@ -244,7 +245,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   googleFullBtn: {
-    flex: 1,
+    width: '100%',
     flexDirection: 'row',
     gap: 12,
     backgroundColor: '#FFF',

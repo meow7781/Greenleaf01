@@ -112,9 +112,14 @@ export default function LoginScreen() {
           )}
 
           {step === 'otp' && (
-            <TouchableOpacity onPress={() => setStep('phone')} style={styles.resendBtn}>
-              <Text style={styles.resendText}>Resend Code</Text>
-            </TouchableOpacity>
+            <View style={styles.otpActions}>
+              <TouchableOpacity onPress={() => setStep('phone')} style={styles.resendBtn}>
+                <Text style={styles.resendText}>Resend Code</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.resendBtn}>
+                <Text style={styles.forgotText}>Forgot Password?</Text>
+              </TouchableOpacity>
+            </View>
           )}
         </ScrollView>
       </SafeAreaView>
@@ -290,5 +295,15 @@ const styles = StyleSheet.create({
     color: '#00C881',
     fontWeight: 'bold',
     fontSize: 16,
+  },
+  otpActions: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 30,
+  },
+  forgotText: {
+    color: '#999',
+    fontWeight: 'bold',
+    fontSize: 14,
   },
 });

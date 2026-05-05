@@ -7,13 +7,21 @@ import { LinearGradient } from 'expo-linear-gradient';
 const { width, height } = Dimensions.get('window');
 
 export default function TrackingScreen() {
-  const [minutes, setMinutes] = useState(12);
+  const [minutes, setMinutes] = useState(15);
+  const [status, setStatus] = useState<'dispatched' | 'picking' | 'delivering'>('dispatched');
 
   useEffect(() => {
+    const timer = setTimeout(() => {
+      setStatus('picking');
+    }, 4000);
+
     const interval = setInterval(() => {
       setMinutes(m => (m > 1 ? m - 1 : 1));
     }, 60000);
-    return () => clearInterval(interval);
+    return () => {
+      clearTimeout(timer);
+      clearInterval(interval);
+    };
   }, []);
 
   return (
@@ -26,10 +34,12 @@ export default function TrackingScreen() {
           resizeMode="cover"
         />
         {/* Delivery Path Simulation */}
-        <View style={styles.deliveryMarker}>
-          <View style={styles.markerPulse} />
-          <MaterialCommunityIcons name="moped" size={24} color="#FFF" />
-        </View>
+        {status !== 'dispatched' && (
+          <View style={styles.deliveryMarker}>
+            <View style={styles.markerPulse} />
+            <MaterialCommunityIcons name="moped" size={24} color="#FFF" />
+          </View>
+        )}
         <View style={styles.homeMarker}>
           <Ionicons name="home" size={24} color="#00C881" />
         </View>
@@ -42,8 +52,8 @@ export default function TrackingScreen() {
             <Ionicons name="chevron-back" size={24} color="#000" />
           </TouchableOpacity>
           <View style={styles.headerText}>
-            <Text style={styles.headerTitle}>Arriving in {minutes} mins</Text>
-            <Text style={styles.headerSub}>Delivering to Home</Text>
+            <Text style={styles.headerTitle}>{status === 'dispatched' ? 'Order Dispatched' : `Arriving in ${minutes} mins`}</Text>
+            <Text style={styles.headerSub}>{status === 'dispatched' ? 'Finding nearby biker...' : 'Delivering to Home'}</Text>
           </View>
         </View>
       </SafeAreaView>
@@ -54,8 +64,12 @@ export default function TrackingScreen() {
         
         <View style={styles.statusRow}>
           <View style={styles.deliveryInfo}>
-            <Text style={styles.statusTitle}>Valet is reaching the nursery</Text>
-            <Text style={styles.statusSub}>Arun is picking up your Monstera...</Text>
+            <Text style={styles.statusTitle}>
+              {status === 'dispatched' ? 'Your order is being packed' : 'Valet is reaching the nursery'}
+            </Text>
+            <Text style={styles.statusSub}>
+              {status === 'dispatched' ? 'We are preparing your plants for dispatch...' : 'Arun is picking up your plants...'}
+            </Text>
           </View>
           <Image source={require('@/assets/images/partial-react-logo.png')} style={styles.deliveryAvatar} />
         </View>
